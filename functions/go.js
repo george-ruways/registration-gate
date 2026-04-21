@@ -9,9 +9,6 @@
   const OPEN_MINUTE = 0;
 
   const REFRESH_SECONDS = 10;
-
-  // Fixed timestamp for countdown display only.
-  // Server-side gate below is the real authority.
   const TARGET_ISO = "2026-04-21T23:00:00+02:00";
 
   function cairoNowParts(date = new Date()) {
@@ -214,7 +211,7 @@
       const minutes = Math.floor((totalSeconds % 3600) / 60);
       const seconds = totalSeconds % 60;
 
-      countdownEl.textContent = `${hours}h ${minutes}m ${seconds}s`;
+      countdownEl.textContent = hours + "h " + minutes + "m " + seconds + "s";
     }
 
     renderCountdown();
