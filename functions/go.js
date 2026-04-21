@@ -1,7 +1,7 @@
 ﻿export async function onRequest(context) {
   const FORM_URL = context.env.FORM_URL;
 
-  // Production opening time: 21 April 2026, 11:00 PM Cairo time
+  // Real opening time: 21 April 2026, 11:00 PM Cairo time
   const OPEN_YEAR = 2026;
   const OPEN_MONTH = 4;
   const OPEN_DAY = 21;
@@ -9,6 +9,10 @@
   const OPEN_MINUTE = 0;
 
   const REFRESH_SECONDS = 10;
+
+  // Fixed timestamp for countdown display only.
+  // Server-side gate below is the real authority.
+  const TARGET_ISO = "2026-04-21T23:00:00+02:00";
 
   function cairoNowParts(date = new Date()) {
     const parts = new Intl.DateTimeFormat("en-GB", {
@@ -126,6 +130,8 @@
       min-height: 100vh;
       display: grid;
       place-items: center;
+      padding: 16px;
+      box-sizing: border-box;
     }
     .card {
       width: min(92vw, 560px);
@@ -135,19 +141,85 @@
       padding: 28px;
       text-align: center;
     }
-    h1 { margin-top: 0; margin-bottom: 10px; }
-    p { line-height: 1.6; margin: 8px 0; }
-    .time { font-weight: 700; }
-    .small { font-size: 13px; color: #6b7280; margin-top: 12px; }
+    h1 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    p {
+      line-height: 1.6;
+      margin: 8px 0;
+    }
+    .time {
+      font-weight: 700;
+    }
+    .countdown {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 18px 0;
+      word-break: break-word;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 12px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 14px 22px;
+      font-size: 16px;
+      font-weight: 700;
+      width: 100%;
+      max-width: 320px;
+      box-sizing: border-box;
+    }
+    .small {
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: 14px;
+    }
   </style>
 </head>
 <body>
   <div class="card">
     <h1>Registration is not open yet</h1>
     <p class="time">Opens at 21 April 2026, 11:00 PM Cairo time</p>
-    <p>This page refreshes automatically every ${REFRESH_SECONDS} seconds.</p>
-    <p class="small">Keep this page open. It will redirect automatically when registration opens.</p>
+
+    <div class="countdown" id="countdown">Calculating...</div>
+
+    <a class="btn" href="/go">Open registration</a>
+
+    <p class="small">
+      This page refreshes automatically every ${REFRESH_SECONDS} seconds.
+      When registration opens, it will redirect automatically.
+    </p>
   </div>
+
+  <script>
+    const TARGET_ISO = "${TARGET_ISO}";
+    const countdownEl = document.getElementById("countdown");
+
+    function renderCountdown() {
+      const now = Date.now();
+      const target = new Date(TARGET_ISO).getTime();
+      let diff = target - now;
+
+      if (diff <= 0) {
+        countdownEl.textContent = "Opening now...";
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      countdownEl.textContent = `${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    renderCountdown();
+    setInterval(renderCountdown, 1000);
+  </script>
 </body>
 </html>`;
 
