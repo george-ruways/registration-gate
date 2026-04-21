@@ -74,7 +74,7 @@
     .card {
       width: min(94vw, 520px);
       background: white;
-      border-radius: 16px;
+      border-radius: 18px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
       padding: 24px;
       text-align: center;
@@ -115,18 +115,18 @@
 
   const html = `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="refresh" content="${REFRESH_SECONDS}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registration not open yet</title>
+  <title>THY Registration</title>
   <style>
     * { box-sizing: border-box; }
 
     body {
-      font-family: Arial, sans-serif;
-      background: #f6f7fb;
+      font-family: Arial, "Segoe UI", Tahoma, sans-serif;
+      background: linear-gradient(180deg, #f8f8f8 0%, #f1f1f1 100%);
       color: #111827;
       margin: 0;
       min-height: 100vh;
@@ -136,41 +136,78 @@
     }
 
     .card {
-      width: min(94vw, 520px);
+      width: min(94vw, 540px);
       background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      padding: 22px 18px;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      padding: 20px 18px 22px;
       text-align: center;
+      border-top: 4px solid #e11d2e;
     }
 
-    h1 {
-      margin: 0 0 10px 0;
-      font-size: clamp(26px, 5vw, 34px);
-      line-height: 1.15;
+    .logo-wrap {
+      margin-bottom: 12px;
     }
 
-    p {
-      line-height: 1.55;
-      margin: 8px 0;
-      font-size: clamp(15px, 3.7vw, 17px);
+    .logo {
+      width: min(170px, 42vw);
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .brand-en {
+      margin: 6px 0 0 0;
+      font-size: clamp(20px, 4.4vw, 28px);
+      font-weight: 700;
+      color: #c28a2b;
+      line-height: 1.2;
+      direction: ltr;
+    }
+
+    .brand-ar {
+      margin: 8px 0 0 0;
+      font-size: clamp(14px, 3.6vw, 17px);
+      line-height: 1.7;
+      color: #4b5563;
+    }
+
+    .event {
+      margin: 12px 0 8px 0;
+      font-size: clamp(18px, 4.2vw, 24px);
+      font-weight: 700;
+      color: #b91c1c;
+    }
+
+    .status {
+      margin: 12px 0 6px 0;
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: 800;
+      line-height: 1.2;
+      color: #111827;
     }
 
     .time {
       font-weight: 700;
+      color: #6b4f1d;
+      font-size: clamp(15px, 3.8vw, 18px);
+      line-height: 1.6;
+      margin: 8px 0 0 0;
     }
 
     .countdown {
-      font-size: clamp(28px, 8vw, 42px);
-      font-weight: 700;
-      margin: 18px 0 14px 0;
-      word-break: break-word;
+      font-size: clamp(30px, 8vw, 44px);
+      font-weight: 800;
+      margin: 20px 0 16px 0;
       line-height: 1.1;
+      word-break: break-word;
+      color: #111827;
+      direction: ltr;
     }
 
     .btn {
       display: inline-block;
-      margin-top: 12px;
+      margin-top: 8px;
       background: #2563eb;
       color: white;
       text-decoration: none;
@@ -179,30 +216,40 @@
       font-size: 18px;
       font-weight: 700;
       width: 100%;
-      max-width: 320px;
+      max-width: 330px;
       min-height: 54px;
       box-sizing: border-box;
+      direction: rtl;
     }
 
     .small {
       font-size: clamp(13px, 3.2vw, 14px);
       color: #6b7280;
       margin-top: 14px;
+      line-height: 1.7;
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <h1>Registration is not open yet</h1>
-    <p class="time">Opens at 21 April 2026, 11:00 PM Cairo time</p>
+    <div class="logo-wrap">
+      <img class="logo" src="/thy-logo.png" alt="THY logo" />
+    </div>
+
+    <p class="brand-en">Towards Healthy Youth</p>
+    <p class="brand-ar">لجنة المؤتمرات بخدمة الشباب الجامعي، كنيسة الشهيد مارجرجس بأسيوط</p>
+    <p class="event">♥️🥁 مؤتمر صيف ٢٠٢٦ 🥁♥️</p>
+
+    <p class="status">التسجيل غير متاح الآن</p>
+    <p class="time">يفتح التسجيل يوم 21 April 2026 الساعة 11:00 PM بتوقيت القاهرة</p>
 
     <div class="countdown" id="countdown">Calculating...</div>
 
-    <a class="btn" href="/go">Open registration</a>
+    <a class="btn" href="/go">الدخول إلى التسجيل</a>
 
     <p class="small">
-      This page refreshes automatically every ${REFRESH_SECONDS} seconds.
-      When registration opens, it will redirect automatically.
+      يتم تحديث هذه الصفحة تلقائيًا كل ${REFRESH_SECONDS} ثوانٍ،
+      وعند فتح التسجيل سيتم تحويلك تلقائيًا.
     </p>
   </div>
 
