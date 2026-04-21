@@ -8,7 +8,7 @@
   const OPEN_HOUR = 23;
   const OPEN_MINUTE = 0;
 
-  const REFRESH_SECONDS = 10;
+  // Cairo is UTC+2 on 2026-04-21
   const TARGET_ISO = "2026-04-21T23:00:00+02:00";
 
   function cairoNowParts(date = new Date()) {
@@ -67,13 +67,15 @@
       min-height: 100vh;
       display: grid;
       place-items: center;
+      padding: 16px;
+      box-sizing: border-box;
     }
     .card {
-      width: min(92vw, 560px);
+      width: min(94vw, 520px);
       background: white;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      padding: 28px;
+      padding: 24px;
       text-align: center;
     }
   </style>
@@ -115,10 +117,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="${REFRESH_SECONDS}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registration not open yet</title>
   <style>
+    * { box-sizing: border-box; }
+
     body {
       font-family: Arial, sans-serif;
       background: #f6f7fb;
@@ -127,51 +130,64 @@
       min-height: 100vh;
       display: grid;
       place-items: center;
-      padding: 16px;
-      box-sizing: border-box;
+      padding: 14px;
     }
+
     .card {
-      width: min(92vw, 560px);
+      width: min(94vw, 520px);
       background: white;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      padding: 28px;
+      padding: 22px 18px;
       text-align: center;
     }
+
     h1 {
-      margin-top: 0;
-      margin-bottom: 10px;
-      font-size: 28px;
+      margin: 0 0 10px 0;
+      font-size: clamp(26px, 5vw, 34px);
+      line-height: 1.15;
     }
+
     p {
-      line-height: 1.6;
+      line-height: 1.55;
       margin: 8px 0;
+      font-size: clamp(15px, 3.7vw, 17px);
     }
+
     .time {
       font-weight: 700;
     }
+
     .countdown {
-      font-size: 28px;
+      font-size: clamp(28px, 8vw, 42px);
       font-weight: 700;
-      margin: 18px 0;
+      margin: 18px 0 14px 0;
       word-break: break-word;
+      line-height: 1.1;
     }
+
     .btn {
-      display: inline-block;
-      margin-top: 12px;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      border-radius: 12px;
-      padding: 14px 22px;
-      font-size: 16px;
+      appearance: none;
+      border: 0;
+      border-radius: 14px;
+      padding: 15px 18px;
+      font-size: 18px;
       font-weight: 700;
       width: 100%;
-      max-width: 320px;
-      box-sizing: border-box;
+      min-height: 54px;
+      background: #9ca3af;
+      color: white;
+      cursor: not-allowed;
+      transition: none;
     }
+
+    .btn.enabled {
+      background: #2563eb;
+      cursor: pointer;
+    }
+
     .small {
-      font-size: 13px;
+      font-size: clamp(13px, 3.2vw, 14px);
       color: #6b7280;
       margin-top: 14px;
     }
@@ -184,27 +200,32 @@
 
     <div class="countdown" id="countdown">Calculating...</div>
 
-    <a class="btn" href="/go">Open registration</a>
+    <button class="btn" id="openBtn" disabled>Open registration</button>
 
     <p class="small">
-      This page refreshes automatically every ${REFRESH_SECONDS} seconds.
-      When registration opens, it will redirect automatically.
+      The button will activate at the opening time.
     </p>
   </div>
 
   <script>
     const TARGET_ISO = "${TARGET_ISO}";
     const countdownEl = document.getElementById("countdown");
+    const openBtn = document.getElementById("openBtn");
 
-    function renderCountdown() {
+    function renderState() {
       const now = Date.now();
       const target = new Date(TARGET_ISO).getTime();
       let diff = target - now;
 
       if (diff <= 0) {
-        countdownEl.textContent = "Opening now...";
+        countdownEl.textContent = "Registration is open";
+        openBtn.disabled = false;
+        openBtn.classList.add("enabled");
         return;
       }
+
+      openBtn.disabled = true;
+      openBtn.classList.remove("enabled");
 
       const totalSeconds = Math.floor(diff / 1000);
       const hours = Math.floor(totalSeconds / 3600);
@@ -214,8 +235,14 @@
       countdownEl.textContent = hours + "h " + minutes + "m " + seconds + "s";
     }
 
-    renderCountdown();
-    setInterval(renderCountdown, 1000);
+    openBtn.addEventListener("click", function () {
+      if (!openBtn.disabled) {
+        window.location.href = "/go";
+      }
+    });
+
+    renderState();
+    setInterval(renderState, 1000);
   </script>
 </body>
 </html>`;
