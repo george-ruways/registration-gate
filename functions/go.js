@@ -1,13 +1,16 @@
 ﻿export async function onRequest(context) {
   const FORM_URL = context.env.FORM_URL;
 
+  // Production opening time: 21 April 2026, 11:00 PM Cairo time
   const OPEN_YEAR = 2026;
   const OPEN_MONTH = 4;
   const OPEN_DAY = 21;
-  const OPEN_HOUR = 2;
-  const OPEN_MINUTE = 57;
+  const OPEN_HOUR = 23;
+  const OPEN_MINUTE = 0;
 
-  const TARGET_ISO = "2026-04-21T02:57:00+02:00";
+  // Cairo is UTC+2 on 2026-04-21
+  const TARGET_ISO = "2026-04-21T23:00:00+02:00";
+  const REFRESH_SECONDS = 10;
 
   function cairoNowParts(date = new Date()) {
     const parts = new Intl.DateTimeFormat("en-GB", {
@@ -56,10 +59,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Configuration error</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f6f7fb;
+      color: #111827;
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    .card {
+      width: min(94vw, 520px);
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      padding: 24px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <h1>Configuration error</h1>
-  <p>FORM_URL is missing in Cloudflare Pages environment variables.</p>
+  <div class="card">
+    <h1>Configuration error</h1>
+    <p>FORM_URL is missing in Cloudflare Pages environment variables.</p>
+  </div>
 </body>
 </html>`,
       {
@@ -92,10 +118,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="${REFRESH_SECONDS}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registration not open yet</title>
   <style>
     * { box-sizing: border-box; }
+
     body {
       font-family: Arial, sans-serif;
       background: #f6f7fb;
@@ -106,6 +134,7 @@
       place-items: center;
       padding: 14px;
     }
+
     .card {
       width: min(94vw, 520px);
       background: white;
@@ -114,19 +143,23 @@
       padding: 22px 18px;
       text-align: center;
     }
+
     h1 {
       margin: 0 0 10px 0;
       font-size: clamp(26px, 5vw, 34px);
       line-height: 1.15;
     }
+
     p {
       line-height: 1.55;
       margin: 8px 0;
       font-size: clamp(15px, 3.7vw, 17px);
     }
+
     .time {
       font-weight: 700;
     }
+
     .countdown {
       font-size: clamp(28px, 8vw, 42px);
       font-weight: 700;
@@ -134,23 +167,23 @@
       word-break: break-word;
       line-height: 1.1;
     }
+
     .btn {
-      appearance: none;
-      border: 0;
+      display: inline-block;
+      margin-top: 12px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
       border-radius: 14px;
       padding: 15px 18px;
       font-size: 18px;
       font-weight: 700;
       width: 100%;
+      max-width: 320px;
       min-height: 54px;
-      background: #9ca3af;
-      color: white;
-      cursor: not-allowed;
+      box-sizing: border-box;
     }
-    .btn.enabled {
-      background: #2563eb;
-      cursor: pointer;
-    }
+
     .small {
       font-size: clamp(13px, 3.2vw, 14px);
       color: #6b7280;
@@ -161,36 +194,31 @@
 <body>
   <div class="card">
     <h1>Registration is not open yet</h1>
-    <p class="time">Test opens at 21 April 2026, 02:57 AM Cairo time</p>
+    <p class="time">Opens at 21 April 2026, 11:00 PM Cairo time</p>
 
     <div class="countdown" id="countdown">Calculating...</div>
 
-    <button class="btn" id="openBtn" disabled>Open registration</button>
+    <a class="btn" href="/go">Open registration</a>
 
     <p class="small">
-      Test mode: the button should activate in about 5 minutes.
+      This page refreshes automatically every ${REFRESH_SECONDS} seconds.
+      When registration opens, it will redirect automatically.
     </p>
   </div>
 
   <script>
-    const TARGET_ISO = "2026-04-21T02:57:00+02:00";
+    const TARGET_ISO = "${TARGET_ISO}";
     const countdownEl = document.getElementById("countdown");
-    const openBtn = document.getElementById("openBtn");
 
-    function renderState() {
+    function renderCountdown() {
       const now = Date.now();
       const target = new Date(TARGET_ISO).getTime();
       let diff = target - now;
 
       if (diff <= 0) {
-        countdownEl.textContent = "Registration is open";
-        openBtn.disabled = false;
-        openBtn.classList.add("enabled");
+        countdownEl.textContent = "Opening now...";
         return;
       }
-
-      openBtn.disabled = true;
-      openBtn.classList.remove("enabled");
 
       const totalSeconds = Math.floor(diff / 1000);
       const hours = Math.floor(totalSeconds / 3600);
@@ -200,17 +228,8 @@
       countdownEl.textContent = hours + "h " + minutes + "m " + seconds + "s";
     }
 
-    openBtn.addEventListener("click", function () {
-      if (!openBtn.disabled) {
-        window.location.href = "/go";
-      }
-    });
-
-    renderState();
-    setInterval(renderState, 1000);
-    window.addEventListener("focus", renderState);
-    document.addEventListener("visibilitychange", renderState);
-    window.addEventListener("pageshow", renderState);
+    renderCountdown();
+    setInterval(renderCountdown, 1000);
   </script>
 </body>
 </html>`;
