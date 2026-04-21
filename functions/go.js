@@ -35,13 +35,13 @@
 
   function toKey(p) {
     const pad = (n) => String(n).padStart(2, "0");
-    return ${p.year};
+    return `${p.year}${pad(p.month)}${pad(p.day)}${pad(p.hour)}${pad(p.minute)}`;
   }
 
   const now = cairoNowParts();
   const nowKey = toKey(now);
   const openKey =
-    ${OPEN_YEAR};
+    `${OPEN_YEAR}${String(OPEN_MONTH).padStart(2, "0")}${String(OPEN_DAY).padStart(2, "0")}${String(OPEN_HOUR).padStart(2, "0")}${String(OPEN_MINUTE).padStart(2, "0")}`;
 
   const commonHeaders = {
     "Cache-Control": "no-store, max-age=0",
@@ -59,7 +59,7 @@
     });
   }
 
-  const html = 
+  const html = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,7 +97,7 @@
     <p><a href="/">Back to main page</a></p>
   </div>
 </body>
-</html>;
+</html>`;
 
   return new Response(html, {
     status: 200,
