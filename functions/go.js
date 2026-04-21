@@ -120,7 +120,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="refresh" content="${REFRESH_SECONDS}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>THY Registration</title>
+  <title>Conference Registration</title>
   <style>
     * { box-sizing: border-box; }
 
@@ -136,7 +136,7 @@
     }
 
     .card {
-      width: min(94vw, 540px);
+      width: min(94vw, 560px);
       background: white;
       border-radius: 20px;
       box-shadow: 0 12px 30px rgba(0,0,0,0.08);
@@ -156,16 +156,15 @@
       margin: 0 auto;
     }
 
-    .brand-en {
-      margin: 6px 0 0 0;
-      font-size: clamp(20px, 4.4vw, 28px);
+    .brand-main {
+      margin: 8px 0 0 0;
+      font-size: clamp(18px, 4.3vw, 24px);
       font-weight: 700;
-      color: #c28a2b;
-      line-height: 1.2;
-      direction: ltr;
+      color: #6b4f1d;
+      line-height: 1.6;
     }
 
-    .brand-ar {
+    .brand-sub {
       margin: 8px 0 0 0;
       font-size: clamp(14px, 3.6vw, 17px);
       line-height: 1.7;
@@ -173,26 +172,48 @@
     }
 
     .event {
-      margin: 12px 0 8px 0;
-      font-size: clamp(18px, 4.2vw, 24px);
+      margin: 14px 0 8px 0;
+      font-size: clamp(18px, 4.3vw, 24px);
       font-weight: 700;
       color: #b91c1c;
+      line-height: 1.5;
+    }
+
+    .event-en {
+      margin: 2px 0 0 0;
+      font-size: clamp(14px, 3.4vw, 16px);
+      color: #6b7280;
+      direction: ltr;
     }
 
     .status {
-      margin: 12px 0 6px 0;
+      margin: 14px 0 6px 0;
       font-size: clamp(22px, 5vw, 30px);
       font-weight: 800;
       line-height: 1.2;
       color: #111827;
     }
 
+    .status-en {
+      margin: 0;
+      font-size: clamp(14px, 3.4vw, 16px);
+      color: #6b7280;
+      direction: ltr;
+    }
+
     .time {
       font-weight: 700;
       color: #6b4f1d;
       font-size: clamp(15px, 3.8vw, 18px);
-      line-height: 1.6;
-      margin: 8px 0 0 0;
+      line-height: 1.8;
+      margin: 10px 0 0 0;
+    }
+
+    .time-en {
+      margin: 4px 0 0 0;
+      font-size: clamp(14px, 3.3vw, 16px);
+      color: #6b7280;
+      direction: ltr;
     }
 
     .countdown {
@@ -219,37 +240,47 @@
       max-width: 330px;
       min-height: 54px;
       box-sizing: border-box;
-      direction: rtl;
     }
 
     .small {
       font-size: clamp(13px, 3.2vw, 14px);
       color: #6b7280;
       margin-top: 14px;
-      line-height: 1.7;
+      line-height: 1.8;
+    }
+
+    .small-en {
+      display: block;
+      margin-top: 4px;
+      direction: ltr;
     }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="logo-wrap">
-      <img class="logo" src="/thy-logo.png" alt="THY logo" />
+      <img class="logo" src="/thy-logo.png" alt="Conference logo" />
     </div>
 
-    <p class="brand-en">Towards Healthy Youth</p>
-    <p class="brand-ar">لجنة المؤتمرات بخدمة الشباب الجامعي، كنيسة الشهيد مارجرجس بأسيوط</p>
+    <p class="brand-main">لجنة المؤتمرات بخدمة الشباب الجامعي، كنيسة الشهيد مارجرجس بأسيوط</p>
+    <p class="brand-sub">الصفحة الرسمية للتسجيل الإلكتروني</p>
+
     <p class="event">♥️🥁 مؤتمر صيف ٢٠٢٦ 🥁♥️</p>
+    <p class="event-en">Summer Conference 2026</p>
 
     <p class="status">التسجيل غير متاح الآن</p>
+    <p class="status-en">Registration is not open yet</p>
+
     <p class="time">يفتح التسجيل يوم 21 April 2026 الساعة 11:00 PM بتوقيت القاهرة</p>
+    <p class="time-en">Registration opens on 21 April 2026 at 11:00 PM Cairo time</p>
 
     <div class="countdown" id="countdown">Calculating...</div>
 
-    <a class="btn" href="/go">الدخول إلى التسجيل</a>
+    <a class="btn" href="/go">الدخول إلى التسجيل | Open Registration</a>
 
     <p class="small">
-      يتم تحديث هذه الصفحة تلقائيًا كل ${REFRESH_SECONDS} ثوانٍ،
-      وعند فتح التسجيل سيتم تحويلك تلقائيًا.
+      يتم تحديث هذه الصفحة تلقائيًا كل ${REFRESH_SECONDS} ثوانٍ، وعند فتح التسجيل سيتم تحويلك تلقائيًا.
+      <span class="small-en">This page refreshes automatically every ${REFRESH_SECONDS} seconds and will redirect automatically once registration opens.</span>
     </p>
   </div>
 
