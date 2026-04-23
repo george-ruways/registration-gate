@@ -237,7 +237,7 @@
     <p class="footer">Official social channels</p>
   </main>
   <script>
-    // Try opening native apps on mobile; if unavailable, open the web URL in a new tab.
+    // Try opening native apps on mobile; if unavailable, open web URL (new tab when allowed).
     function setupSocialLink(link) {
       link.addEventListener("click", function (event) {
         const appUrl = link.getAttribute("data-app");
@@ -249,18 +249,10 @@
 
         event.preventDefault();
 
-        // Opening a blank tab from the click gesture helps avoid popup blocking.
-        const fallbackTab = window.open("about:blank", "_blank", "noopener,noreferrer");
-
         let didHide = false;
         const onVisibilityChange = function () {
           if (document.hidden) {
             didHide = true;
-
-            // If app opens successfully, close the temporary fallback tab.
-            if (fallbackTab && !fallbackTab.closed) {
-              fallbackTab.close();
-            }
           }
         };
 
@@ -269,10 +261,9 @@
 
         setTimeout(function () {
           if (!didHide) {
-            if (fallbackTab && !fallbackTab.closed) {
-              fallbackTab.location.href = webUrl;
-            } else {
-              window.open(webUrl, "_blank", "noopener,noreferrer");
+            const newTab = window.open(webUrl, "_blank", "noopener,noreferrer");
+            if (!newTab) {
+              window.location.href = webUrl;
             }
           }
         }, 900);
